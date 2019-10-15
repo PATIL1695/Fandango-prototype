@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: black;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* Add padding to containers */
+.container {
+    padding: 16px;
+    background-color: white;
+}
+
+/* Full-width input fields */
+input[type=text], [type=password] {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+}
+
+input[type=text], [type=password]:focus {
+    background-color: #ddd;
+    outline: none;
+}
+
+/* Overwrite default styles of hr */
+hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+}
+
+/* Set a style for the submit button */
+.registerbtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+}
+
+.registerbtn:hover {
+    opacity: 1;
+}
+
+/* Add a blue text color to links */
+a {
+    color: dodgerblue;
+}
+
+/* Set a grey background color and center the text of the "sign in" section */
+.signin {
+    background-color: #f1f1f1;
+    text-align: center;
+}
+    </style>
+</head>
+<body>
+
+<form action="{{ url_for('confirm_booking') }}" method="post">
+
+  <div class="container">
+    <h1>Confirm Booking</h1>
+    <p>Do you accept?</p>
+    <hr>
+
+      Movie Name: <label>{{ movie_info[0][0] }}</label><br>
+      <br>
+      Show Date: <label>{{ other_info[4] }}</label><br>
+      <br>
+      Show Time: <label>{{ other_info[3] }}</label><br>
+      <br>
+      {% for seat in seat_info %}
+      Seats: <label>{{ seat }}</label><br>
+      {% endfor %}
+      <br>
+      {% set total_seats = seat_info | length %}
+      {% set cost = total_seats * movie_info[0][1] %}
+      Price $: <label>{{ cost }}</label><br>
+      <br>
+
+    <label><b>Yes</b>
+        <input type="checkbox" value="Yes" name="decision" />
+    </label>
+
+    <label><b>No</b>
+        <input type="checkbox" value="No" name="decision" />
+    </label>
+
+    <hr>
+      {% set theater = other_info[1] | string %}
+      {% set movie_id = other_info[5] | string %}
+      {% set ticket_price = movie_info[0][1] | string %}
+      {% set ts = seat_info|join("-") %}
+      {% set total = ts + '/' + other_info[0] + '/' + movie_id + '/' + theater + '/' + other_info[2] + '/' + other_info[3] + '/' + other_info[4] + '/' + ticket_price + '/' + movie_info[0][0] %}
+      <input type="hidden" value= {{ total }} name="complete_info_list"/>
+    <button type="submit" class="registerbtn">Confirm</button>
+  </div>
+
+</form>
+
+</body>
+</html>
